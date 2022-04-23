@@ -2,11 +2,7 @@
   <div id="Homepage">
     <div class="header animate__animated animate__fadeInDown">
       <div class="toolbar">
-        <el-input
-          placeholder="请输入请求的函数网关APIG"
-          v-model="myfunc.url"
-          disabled
-        >
+        <el-input placeholder="请输入请求的函数网关APIG" :value="url">
           <template slot="prepend">Https://</template>
         </el-input>
         <el-button type="primary" @click="submit">Submit</el-button>
@@ -93,6 +89,7 @@
 </template>
 
 <script>
+import functions from "../../static/data";
 import CodeEditor from "@/components/CodeEditor.vue";
 import Wiki from "@/components/Wiki.vue";
 export default {
@@ -125,8 +122,8 @@ export default {
           this.$refs.bottomHalf.style.height = "calc(100% - 35px)";
         } else if (!this.closeBottomHalf && !this.closeTopHalf) {
           // 下半窗是开着的同时上半场要打开
-          this.$refs.topHalf.style.height = "40%";
-          this.$refs.bottomHalf.style.height = "60%";
+          this.$refs.topHalf.style.height = "50%";
+          this.$refs.bottomHalf.style.height = "50%";
         }
       } else if (i == 1) {
         this.closeBottomHalf = !this.closeBottomHalf;
@@ -142,20 +139,20 @@ export default {
           this.$refs.topHalf.style.height = "calc(100% - 35px)";
         } else if (!this.closeTopHalf && !this.closeBottomHalf) {
           // 上半窗是开着的同时要打开下半窗
-          this.$refs.topHalf.style.height = "40%";
-          this.$refs.bottomHalf.style.height = "60%";
+          this.$refs.topHalf.style.height = "50%";
+          this.$refs.bottomHalf.style.height = "50%";
         }
       }
-      var that =this;
-      setTimeout(function(){
+      var that = this;
+      setTimeout(function () {
         that.transformCallBack();
-      },300)
+      }, 200);
     },
     transformCallBack() {
       console.log(this.$refs.topHalf.style.transition);
       this.$refs.topHalf.style.transition = "none";
       this.$refs.bottomHalf.style.transition = "none";
-      console.log(this.$refs.topHalf.style.transition)
+      console.log(this.$refs.topHalf.style.transition);
       this.flag = !this.flag;
     },
     backup() {
@@ -185,6 +182,13 @@ export default {
   mounted() {
     window.submitError = this.submitError;
   },
+  computed: {
+    url() {
+      if (this.myfunc.url != null)
+        return `planetapi.coolchong.cn` + this.myfunc.url;
+      else return `loading`;
+    },
+  },
   data() {
     return {
       status: 1,
@@ -195,52 +199,7 @@ export default {
       closeTopHalf: false,
       closeBottomHalf: false,
       code: "",
-      functions: [
-        {
-          name: "max",
-          subtitle: "寻找向量或矩阵每行(列)的最大元素",
-
-          info: `
-           <li>
-            <span class="wave">功能详解</span>：类似于matlab中的max函数，可以对向量或者矩阵中的元素进行最大值元素查找功能，其中还支持列查找以及行查找，上方编辑器给出了一个对于4×11的矩阵进行列最大值查找，最终返还一个向量存储了每一个列中的最大值，左侧给出了该云函数具体实现代码。
-          </li>
-          <li>
-            <span class="emp">参数 k </span>：取0则为对向量或者矩阵中每一列取最大值，取1则为对向量或者矩阵中每一行取最大值
-          </li>
-          <li>
-            <span class="emp">参数 data </span>：存储输入数据的向量(用一维数组表示,如[1,2])或者矩阵(用二维数组表示，如[[1,2],[2,3]])
-          </li>`,
-          url: "6cc9cd55be7d43388739959dfb9fe99d.apig.cn-north-4.huaweicloudapis.com/max",
-          json: `{
-    "k": 0,
-    "data": [
-        [0,2,3,4,1,2,3,2,3,3,3],
-        [0,2,3,4,1,2,3,2,3,3,3],
-        [1,2,2,2,2,2,2,2,2,2,2],
-        [5,0,-1,8,1,1,1,1,1,1,1]
-    ]
-}`,
-          code: `# -*- coding:utf-8 -*-
-import json
-import base64
-import numpy as np
-def handler (event, context):
-    s=json.loads(str(base64.b64decode(json.dumps(event["body"])),encoding="utf-8"))
-    a=np.array(s['list'])
-    k=s['k']
-    ans=np.max(a,axis=k)
-    result={'ans': ans.tolist()}
-    return {
-        "statusCode": 200,
-        "isBase64Encoded": False,
-        "body": json.dumps(result),
-        "headers": {
-            "Content-Type": "application/json"
-        }
-    }
-`,
-        },
-      ],
+      functions: functions,
     };
   },
 };
@@ -329,12 +288,12 @@ def handler (event, context):
 #Homepage .wrapper .r-main .top-half {
   overflow: hidden;
   transition: height 0.3s;
-  height: 40%;
+  height: 50%;
 }
 #Homepage .wrapper .r-main .bottom-half {
   overflow: hidden;
   transition: height 0.3s;
-  height: 60%;
+  height: 50%;
   background: #fafafa;
   border-top: 2.5px solid #e5e5e5;
 }

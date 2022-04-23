@@ -33,7 +33,7 @@ axios.interceptors.response.use(
   error => {
     ElementUI.Notification({
       title: '警告',
-      message: '出错了~后台小哥哥正在修复中🛠️！',
+      message: '出错了~请检查填写数据格式是否符合规范🛠️！',
       type: 'error'
     });
     submitError();
