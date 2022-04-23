@@ -60,7 +60,7 @@
               ]"
               @click="transform(0)"
             ></i
-            >编辑器
+            >工作区
           </div>
           <CodeEditor
             fontSize="18"
@@ -107,7 +107,8 @@ export default {
       this.code = this.myfunc.json;
     },
     transform(i) {
-      this.flag = !this.flag;
+      this.$refs.topHalf.style.transition = ".3s";
+      this.$refs.bottomHalf.style.transition = ".3s";
       if (i == 0) {
         // console.log(this.$refs.topHalf);
         // 操作上半窗
@@ -145,6 +146,17 @@ export default {
           this.$refs.bottomHalf.style.height = "60%";
         }
       }
+      var that =this;
+      setTimeout(function(){
+        that.transformCallBack();
+      },300)
+    },
+    transformCallBack() {
+      console.log(this.$refs.topHalf.style.transition);
+      this.$refs.topHalf.style.transition = "none";
+      this.$refs.bottomHalf.style.transition = "none";
+      console.log(this.$refs.topHalf.style.transition)
+      this.flag = !this.flag;
     },
     backup() {
       this.$router.push({ name: "Homepage" });
@@ -186,17 +198,17 @@ export default {
       functions: [
         {
           name: "max",
-          subtitle: "找向量或矩阵每行(列)的最大元素",
+          subtitle: "寻找向量或矩阵每行(列)的最大元素",
 
           info: `
            <li>
             <span class="wave">功能详解</span>：类似于matlab中的max函数，可以对向量或者矩阵中的元素进行最大值元素查找功能，其中还支持列查找以及行查找，上方编辑器给出了一个对于4×11的矩阵进行列最大值查找，最终返还一个向量存储了每一个列中的最大值，左侧给出了该云函数具体实现代码。
           </li>
           <li>
-            <span class="emp">变量k</span>：取0则为对向量或者矩阵中每一列取最大值，取1则为对向量或者矩阵中每一行取最大值
+            <span class="emp">参数 k </span>：取0则为对向量或者矩阵中每一列取最大值，取1则为对向量或者矩阵中每一行取最大值
           </li>
           <li>
-            <span class="emp">data</span>：存储输入数据的向量(用一维数组表示,如[1,2])或者矩阵(用二维数组表示，如[[1,2],[2,3]])
+            <span class="emp">参数 data </span>：存储输入数据的向量(用一维数组表示,如[1,2])或者矩阵(用二维数组表示，如[[1,2],[2,3]])
           </li>`,
           url: "6cc9cd55be7d43388739959dfb9fe99d.apig.cn-north-4.huaweicloudapis.com/max",
           json: `{
@@ -316,12 +328,12 @@ def handler (event, context):
 }
 #Homepage .wrapper .r-main .top-half {
   overflow: hidden;
-  /* transition: height 0.3s; */
+  transition: height 0.3s;
   height: 40%;
 }
 #Homepage .wrapper .r-main .bottom-half {
   overflow: hidden;
-  /* transition: height 0.3s; */
+  transition: height 0.3s;
   height: 60%;
   background: #fafafa;
   border-top: 2.5px solid #e5e5e5;
